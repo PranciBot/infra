@@ -2,7 +2,7 @@
 
 echo "Start setup infra"
 
-helm upgrade --install infra chart/ \
+helm upgrade --install infra ../../chart/ \
     --create-namespace \
     --namespace default \
     --timeout 10m \

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,10 +13,22 @@
 
     <artifactId>infra</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>tools</module>
+    </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <helm.plane-enterprise.fullnameOverride>infra-plane</helm.plane-enterprise.fullnameOverride>
+        <helm.plane-enterprise.license.licenseDomain>
+            plane.127.0.0.1.sslip.io
+        </helm.plane-enterprise.license.licenseDomain>
+        <helm.plane-enterprise.planeVersion>v2.4.0</helm.plane-enterprise.planeVersion>
+        <helm.plane-enterprise.ingress.enabled>true</helm.plane-enterprise.ingress.enabled>
+        <helm.plane-enterprise.ingress.ingressClass>kong</helm.plane-enterprise.ingress.ingressClass>
+        <helm.plane-enterprise.env.storageClass>hostpath</helm.plane-enterprise.env.storageClass>
+        <helm.plane-enterprise.services.worker.memoryLimit>2Gi</helm.plane-enterprise.services.worker.memoryLimit>
+        <helm.plane-enterprise.services.worker.memoryRequest>512Mi</helm.plane-enterprise.services.worker.memoryRequest>
+        <helm.plane-enterprise.services.worker.cpuLimit>1000m</helm.plane-enterprise.services.worker.cpuLimit>
+        <helm.plane-enterprise.services.worker.cpuRequest>250m</helm.plane-enterprise.services.worker.cpuRequest>
     </properties>
-
 </project>
