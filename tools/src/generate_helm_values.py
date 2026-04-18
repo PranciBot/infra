@@ -1,10 +1,13 @@
+import sys
 import xml.etree.ElementTree as ET
 import yaml
 from pathlib import Path
 
-WORKDIR = "../../"
-POM_FILE = f"{WORKDIR}pom.xml"
-OUTPUT_FILE = Path(f"{WORKDIR}chart/values.yaml")
+if len(sys.argv) < 3:
+    raise Exception("Usage: generate_helm_values.py <pom_file> <output_file>")
+
+POM_FILE = sys.argv[1]
+OUTPUT_FILE = Path(sys.argv[2])
 
 
 def convert_value(value):

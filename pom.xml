@@ -31,4 +31,37 @@
         <helm.plane-enterprise.services.worker.cpuLimit>1000m</helm.plane-enterprise.services.worker.cpuLimit>
         <helm.plane-enterprise.services.worker.cpuRequest>250m</helm.plane-enterprise.services.worker.cpuRequest>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+                <inherited>false</inherited>
+
+                <executions>
+                    <execution>
+                        <id>generate-helm-values</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <executable>${project.basedir}/tools/.venv/Scripts/python.exe</executable>
+
+                    <arguments>
+                        <argument>${project.basedir}/tools/src/generate_helm_values.py</argument>
+                        <argument>${project.basedir}/pom.xml</argument>
+                        <argument>${project.basedir}/chart/values.yaml</argument>
+                    </arguments>
+
+                    <workingDirectory>${project.basedir}</workingDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
