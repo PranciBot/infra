@@ -6,6 +6,14 @@
 {{- printf "%s%s%s%s" .Values.license.licenseServer .Values.license.licenseDomain .Release.Namespace .Release.Name | sha256sum  -}}
 {{- end -}}
 
+{{- define "plane.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride }}
+{{- else }}
+{{- printf "%s-plane" .Release.Name }}
+{{- end }}
+{{- end }}
+
 {{- define "plane.podScheduling" -}}
   {{- with .nodeSelector }} 
       nodeSelector: {{ toYaml . | nindent 8 }}

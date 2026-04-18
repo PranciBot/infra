@@ -1,0 +1,10 @@
+plane-enterprise:
+  fullnameOverride: infra-plane
+  license:
+    licenseDomain: plane.127.0.0.1.sslip.io
+  planeVersion: v2.4.0
+  ingress:
+    enabled: true
+    ingressClass: kong
+  env:
+    storageClass: hostpath
