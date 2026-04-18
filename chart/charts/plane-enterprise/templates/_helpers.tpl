@@ -14,6 +14,27 @@
 {{- end }}
 {{- end }}
 
+{{/*
+Return the external base URL used by browser redirects and UI navigation.
+If env.web_url is set, prefer it (supports custom ports like :32080).
+*/}}
+{{- define "plane.publicBaseURL" -}}
+{{- if .Values.env.web_url -}}
+{{- trimSuffix "/" .Values.env.web_url -}}
+{{- else if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) -}}
+{{- printf "https://%s" .Values.license.licenseDomain -}}
+{{- else -}}
+{{- printf "http://%s" .Values.license.licenseDomain -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Return host[:port] from publicBaseURL without scheme.
+*/}}
+{{- define "plane.publicHost" -}}
+{{- trimPrefix "http://" (trimPrefix "https://" (include "plane.publicBaseURL" .)) -}}
+{{- end }}
+
 {{- define "plane.podScheduling" -}}
   {{- with .nodeSelector }} 
       nodeSelector: {{ toYaml . | nindent 8 }}

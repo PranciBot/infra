@@ -76,18 +76,12 @@ data:
   LOG_LEVEL: {{ .Values.env.pi_envs.log_level | default "DEBUG" | quote }}
   FASTAPI_APP_HOST: "0.0.0.0"
   FASTAPI_APP_WORKERS: "1"
-  {{- if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) }}
-  PLANE_FRONTEND_URL: "https://{{ .Values.license.licenseDomain }}"
-  {{- else }}
-  PLANE_FRONTEND_URL: "http://{{ .Values.license.licenseDomain }}"
-  {{- end }}
+  PLANE_FRONTEND_URL: "{{ include "plane.publicBaseURL" . }}"
 
   {{- if .Values.env.pi_envs.plane_api_host }}
   PLANE_API_HOST: {{ .Values.env.pi_envs.plane_api_host | quote }}
-  {{- else if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) }}
-  PLANE_API_HOST: "https://{{ .Values.license.licenseDomain }}"
   {{- else }}
-  PLANE_API_HOST: "http://{{ .Values.license.licenseDomain }}"
+  PLANE_API_HOST: "{{ include "plane.publicBaseURL" . }}"
   {{- end }}
 
   PI_INTERNAL_SECRET: {{ .Values.env.pi_envs.internal_secret | default "tyfvfqvBJAgpm9bzvf3r4urJer0Ehfdubk" | quote }}
@@ -98,17 +92,17 @@ data:
 
   {{- if eq .Values.env.pi_envs.cors_allowed_origins "*"}}
   CORS_ALLOWED_ORIGINS: "*"
+  {{- else if and .Values.env.web_url .Values.env.pi_envs.cors_allowed_origins }}
+  CORS_ALLOWED_ORIGINS: "{{ include "plane.publicBaseURL" . }},http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }},{{ .Values.env.pi_envs.cors_allowed_origins }}"
+  {{- else if .Values.env.web_url }}
+  CORS_ALLOWED_ORIGINS: "{{ include "plane.publicBaseURL" . }},http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }}"
   {{- else if .Values.env.pi_envs.cors_allowed_origins }}
   CORS_ALLOWED_ORIGINS: "http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }},{{ .Values.env.pi_envs.cors_allowed_origins }}"
   {{- else }}
   CORS_ALLOWED_ORIGINS: "http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }}"
   {{- end }}
 
-  {{- if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) }}
-  PLANE_OAUTH_REDIRECT_URI: "https://{{ .Values.license.licenseDomain }}/pi/api/v1/oauth/callback/"
-  {{- else }}
-  PLANE_OAUTH_REDIRECT_URI: "http://{{ .Values.license.licenseDomain }}/pi/api/v1/oauth/callback/"
-  {{- end }}
+  PLANE_OAUTH_REDIRECT_URI: "{{ include "plane.publicBaseURL" . }}/pi/api/v1/oauth/callback/"
   PLANE_OAUTH_STATE_EXPIRY_SECONDS: {{ .Values.env.pi_envs.plane_oauth.state_expiry_seconds | default 82800 | quote }}
 
   OPENAI_BASE_URL: {{ .Values.services.pi.ai_providers.openai.base_url | default "" | quote }}

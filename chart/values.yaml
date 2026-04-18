@@ -2,12 +2,13 @@ plane-enterprise:
   fullnameOverride: infra-plane
   license:
     licenseDomain: plane.127.0.0.1.sslip.io
+  env:
+    web_url: http://plane.127.0.0.1.sslip.io:32080
+    storageClass: hostpath
   planeVersion: v2.4.0
   ingress:
     enabled: true
     ingressClass: kong
-  env:
-    storageClass: hostpath
   services:
     worker:
       memoryLimit: 2Gi

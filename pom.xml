@@ -22,6 +22,7 @@
         <helm.plane-enterprise.license.licenseDomain>
             plane.127.0.0.1.sslip.io
         </helm.plane-enterprise.license.licenseDomain>
+        <helm.plane-enterprise.env.web_url>http://plane.127.0.0.1.sslip.io:32080</helm.plane-enterprise.env.web_url>
         <helm.plane-enterprise.planeVersion>v2.4.0</helm.plane-enterprise.planeVersion>
         <helm.plane-enterprise.ingress.enabled>true</helm.plane-enterprise.ingress.enabled>
         <helm.plane-enterprise.ingress.ingressClass>kong</helm.plane-enterprise.ingress.ingressClass>
@@ -64,4 +65,40 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.5.1</version>
+
+                        <executions>
+                            <execution>
+                                <id>run-infra-chart</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+
+                        <configuration>
+                            <executable>bash</executable>
+
+                            <arguments>
+                                <argument>${project.basedir}/tools/src/run-infra-chart.sh</argument>
+                                <argument>${project.basedir}/chart/</argument>
+                            </arguments>
+
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
