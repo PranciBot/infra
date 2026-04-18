@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-docker-registry-credentials
+  name: {{ include "plane.fullname" . }}-docker-registry-credentials
 data:
   .dockerconfigjson: {{ include "imagePullSecret" .}}
 type: kubernetes.io/dockerconfigjson

@@ -2,14 +2,14 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ .Release.Name }}-mail-tls-cert
+  name: {{ include "plane.fullname" . }}-mail-tls-cert
   namespace: {{ .Release.Namespace }}
 spec:
   dnsNames:
-  - {{ .Values.env.email_service_envs.smtp_domain | quote }}
-  
+    - {{ .Values.env.email_service_envs.smtp_domain | quote }}
+
   issuerRef:
-    name: {{ .Release.Name }}-cert-issuer
-  secretName: {{ .Release.Name }}-mail-tls-secret
---- 
+    name: {{ include "plane.fullname" . }}-cert-issuer
+  secretName: {{ (include "plane.fullname" .) }}-mail-tls-secret
+---
 {{- end }}

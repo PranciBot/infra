@@ -4,18 +4,18 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-ssl-cert
+  name: {{ include "plane.fullname" . }}-ssl-cert
 spec:
   dnsNames:
-  - {{ .Values.license.licenseDomain | quote }}
+    - {{ .Values.license.licenseDomain | quote }}
   {{- if and .Values.services.minio.local_setup .Values.ingress.minioHost }}
-  - {{ .Values.ingress.minioHost | quote }}
+    - {{ .Values.ingress.minioHost | quote }}
   {{- end }}
   {{- if and .Values.services.rabbitmq.local_setup .Values.ingress.rabbitmqHost }}
-  - {{ .Values.ingress.rabbitmqHost | quote }}
+    - {{ .Values.ingress.rabbitmqHost | quote }}
   {{- end }}
   issuerRef:
-    name: {{ .Release.Name }}-cert-issuer
-  secretName: {{ .Release.Name }}-ssl-cert
+    name: {{ include "plane.fullname" . }}-cert-issuer
+  secretName: {{ (include "plane.fullname" .) }}-ssl-cert
 
 {{- end}}

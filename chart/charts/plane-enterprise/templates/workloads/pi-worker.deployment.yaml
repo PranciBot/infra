@@ -3,18 +3,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-pi-worker-wl
+  name: {{ include "plane.fullname" . }}-pi-worker-wl
   {{- include "plane.labelsAndAnnotations" .Values.services.pi_worker }}
 spec:
   replicas: {{ .Values.services.pi_worker.replicas | default 1}}
   selector:
     matchLabels:
-      app.name: {{ .Release.Namespace }}-{{ .Release.Name }}-pi-worker
+      app.name: {{ .Release.Namespace }}-{{ (include "plane.fullname" .) }}-pi-worker
   template:
     metadata:
       namespace: {{ .Release.Namespace }}
       labels:
-        app.name: {{ .Release.Namespace }}-{{ .Release.Name }}-pi-worker
+        app.name: {{ .Release.Namespace }}-{{ (include "plane.fullname" .) }}-pi-worker
       annotations:
         timestamp: {{ now | quote }}
     spec:
@@ -23,46 +23,46 @@ spec:
 {{ . | indent 6 }}
       {{- end }}
       containers:
-      - name: {{ .Release.Name }}-pi-worker
-        imagePullPolicy: Always
-        image: {{ .Values.services.pi.image | default "artifacts.plane.so/makeplane/plane-pi-commercial" }}:{{ .Values.planeVersion }}
-        stdin: true
-        tty: true
-        resources:
-          requests:
-            memory: {{ .Values.services.pi_worker.memoryRequest | default "1000Mi" | quote }}
-            cpu: {{ .Values.services.pi_worker.cpuRequest | default "500m" | quote }}
-          limits:
-            memory: {{ .Values.services.pi_worker.memoryLimit  | default "1000Mi" | quote }}
-            cpu: {{ .Values.services.pi_worker.cpuLimit | default "500m" | quote}}
+        - name: {{ include "plane.fullname" . }}-pi-worker
+          imagePullPolicy: Always
+          image: {{ .Values.services.pi.image | default "artifacts.plane.so/makeplane/plane-pi-commercial" }}:{{ .Values.planeVersion }}
+          stdin: true
+          tty: true
+          resources:
+            requests:
+              memory: {{ .Values.services.pi_worker.memoryRequest | default "1000Mi" | quote }}
+              cpu: {{ .Values.services.pi_worker.cpuRequest | default "500m" | quote }}
+            limits:
+              memory: {{ .Values.services.pi_worker.memoryLimit  | default "1000Mi" | quote }}
+              cpu: {{ .Values.services.pi_worker.cpuLimit | default "500m" | quote}}
         {{- with (include "plane.s3CAVolumeMounts" .) }}
 {{ . | indent 8 }}
         {{- end }}
-        command:
-          - /bin/bash
-          - -c
-          - |
-            set -e
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -e
             {{- with (include "plane.s3CAInitScript" .) }}
 {{ . | indent 12 }}
             {{- end }}
 
-            exec ./bin/entrypoint-celery-worker.sh
-        envFrom:
-          - configMapRef:
-              name: {{ .Release.Name }}-pi-api-vars
-              optional: false
-          - secretRef:
-              name: {{ if not (empty .Values.external_secrets.pi_api_env_existingSecret) }}{{ .Values.external_secrets.pi_api_env_existingSecret }}{{ else }}{{ .Release.Name }}-pi-api-secrets{{ end }}
-              optional: false
-          - secretRef:
-              name: {{ if not (empty .Values.external_secrets.doc_store_existingSecret) }}{{ .Values.external_secrets.doc_store_existingSecret }}{{ else }}{{ .Release.Name }}-doc-store-secrets{{ end }}
-              optional: false
-          - secretRef:
-              name: {{ if not (empty .Values.external_secrets.opensearch_existingSecret) }}{{ .Values.external_secrets.opensearch_existingSecret }}{{ else }}{{ .Release.Name }}-opensearch-secrets{{ end }}
-              optional: false
+              exec ./bin/entrypoint-celery-worker.sh
+          envFrom:
+            - configMapRef:
+                name: {{ include "plane.fullname" . }}-pi-api-vars
+                optional: false
+            - secretRef:
+                name: {{ if not (empty .Values.external_secrets.pi_api_env_existingSecret) }}{{ .Values.external_secrets.pi_api_env_existingSecret }}{{ else }}{{ (include "plane.fullname" .) }}-pi-api-secrets{{ end }}
+                optional: false
+            - secretRef:
+                name: {{ if not (empty .Values.external_secrets.doc_store_existingSecret) }}{{ .Values.external_secrets.doc_store_existingSecret }}{{ else }}{{ (include "plane.fullname" .) }}-doc-store-secrets{{ end }}
+                optional: false
+            - secretRef:
+                name: {{ if not (empty .Values.external_secrets.opensearch_existingSecret) }}{{ .Values.external_secrets.opensearch_existingSecret }}{{ else }}{{ (include "plane.fullname" .) }}-opensearch-secrets{{ end }}
+                optional: false
         {{- if or .Values.extraEnv (include "plane.s3CAEnabled" .) }}
-        env:
+          env:
           {{- with (include "plane.s3CAEnvVars" .) }}
 {{ . | indent 10 }}
           {{- end }}
@@ -70,7 +70,7 @@ spec:
           {{- toYaml .Values.extraEnv | nindent 10 }}
           {{- end }}
         {{- end }}
-      serviceAccount: {{ .Release.Name }}-srv-account
-      serviceAccountName: {{ .Release.Name }}-srv-account
+      serviceAccount: {{ (include "plane.fullname" .) }}-srv-account
+      serviceAccountName: {{ (include "plane.fullname" .) }}-srv-account
 ---
 {{- end }}

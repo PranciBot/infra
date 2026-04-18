@@ -3,18 +3,18 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-iframely
+  name: {{ include "plane.fullname" . }}-iframely
   labels:
-    app.name: {{ .Release.Namespace }}-{{ .Release.Name }}-iframely
+    app.name: {{ .Release.Namespace }}-{{ (include "plane.fullname" .) }}-iframely
 spec:
   clusterIP: None
   ports:
-  - name: iframely-8061
-    port: 8061
-    protocol: TCP
-    targetPort: 8061
+    - name: iframely-8061
+      port: 8061
+      protocol: TCP
+      targetPort: 8061
   selector:
-    app.name: {{ .Release.Namespace }}-{{ .Release.Name }}-iframely
+    app.name: {{ .Release.Namespace }}-{{ (include "plane.fullname" .) }}-iframely
 
 ---
 
@@ -22,43 +22,43 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-iframely-wl
+  name: {{ include "plane.fullname" . }}-iframely-wl
   {{- include "plane.labelsAndAnnotations" .Values.services.iframely }}
 spec:
   replicas: {{ .Values.services.iframely.replicas | default 1 }}
   selector:
     matchLabels:
-      app.name: {{ .Release.Namespace }}-{{ .Release.Name }}-iframely
+      app.name: {{ .Release.Namespace }}-{{ (include "plane.fullname" .) }}-iframely
   template:
     metadata:
       namespace: {{ .Release.Namespace }}
       labels:
-        app.name: {{ .Release.Namespace }}-{{ .Release.Name }}-iframely
+        app.name: {{ .Release.Namespace }}-{{ (include "plane.fullname" .) }}-iframely
       annotations:
         timestamp: {{ now | quote }}
     spec:
       {{- include "plane.podScheduling" .Values.services.iframely }}
       containers:
-      - name: {{ .Release.Name }}-iframely
-        imagePullPolicy: Always
-        image: {{ .Values.services.iframely.image | default "artifacts.plane.so/makeplane/iframely:v1.2.0" }}
-        stdin: true
-        tty: true
-        resources:
-          requests:
-            memory: {{ .Values.services.iframely.memoryRequest | default "50Mi" | quote }}
-            cpu: {{ .Values.services.iframely.cpuRequest | default "50m" | quote }}
-          limits:
-            memory: {{ .Values.services.iframely.memoryLimit | default "1000Mi" | quote }}
-            cpu: {{ .Values.services.iframely.cpuLimit | default "500m" | quote }}
-        command:
-          - node
-        args:
-          - server.js
+        - name: {{ include "plane.fullname" . }}-iframely
+          imagePullPolicy: Always
+          image: {{ .Values.services.iframely.image | default "artifacts.plane.so/makeplane/iframely:v1.2.0" }}
+          stdin: true
+          tty: true
+          resources:
+            requests:
+              memory: {{ .Values.services.iframely.memoryRequest | default "50Mi" | quote }}
+              cpu: {{ .Values.services.iframely.cpuRequest | default "50m" | quote }}
+            limits:
+              memory: {{ .Values.services.iframely.memoryLimit | default "1000Mi" | quote }}
+              cpu: {{ .Values.services.iframely.cpuLimit | default "500m" | quote }}
+          command:
+            - node
+          args:
+            - server.js
         {{- if .Values.extraEnv }}
-        env:
+          env:
           {{- toYaml .Values.extraEnv | nindent 10 }}
         {{- end }}
-      serviceAccount: {{ .Release.Name }}-srv-account
-      serviceAccountName: {{ .Release.Name }}-srv-account
+      serviceAccount: {{ (include "plane.fullname" .) }}-srv-account
+      serviceAccountName: {{ (include "plane.fullname" .) }}-srv-account
 {{- end }}

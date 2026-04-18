@@ -4,11 +4,11 @@ kind: Secret
 type: Opaque
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-opensearch-secrets
+  name: {{ include "plane.fullname" . }}-opensearch-secrets
 stringData:
   {{- if .Values.services.opensearch.local_setup }}
   OPENSEARCH_ENABLED: "1"
-  OPENSEARCH_URL: "http://{{ .Release.Name }}-opensearch.{{ .Release.Namespace }}.svc.cluster.local:9200"
+  OPENSEARCH_URL: "http://{{ (include "plane.fullname" .) }}-opensearch.{{ .Release.Namespace }}.svc.cluster.local:9200"
   OPENSEARCH_USERNAME: {{ .Values.services.opensearch.username | default "plane" | quote }}
   OPENSEARCH_PASSWORD: {{ .Values.services.opensearch.password | default "Secure@Pass#123!%^&*" | quote }}
   OPENSEARCH_INITIAL_ADMIN_PASSWORD: {{ .Values.services.opensearch.password | default "Secure@Pass#123!%^&*" | quote }}
@@ -36,7 +36,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-opensearch-init
+  name: {{ include "plane.fullname" . }}-opensearch-init
 data:
   create-user.sh: |
     #!/bin/bash

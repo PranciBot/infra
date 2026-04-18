@@ -5,13 +5,13 @@ kind: Secret
 type: Opaque
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-silo-secrets
+  name: {{ include "plane.fullname" . }}-silo-secrets
 stringData:
   SILO_HMAC_SECRET_KEY: {{ .Values.env.silo_envs.hmac_secret_key | default "gzb7MRLr0FoN129NyWARZEs84P9LzQ" | quote }}
   AES_SECRET_KEY: {{ .Values.env.silo_envs.aes_secret_key | default "dsOdt7YrvxsTIFJ37pOaEVvLxN8KGBCr" | quote }}
 
   {{- if .Values.services.postgres.local_setup }}
-  DATABASE_URL: "postgresql://{{ .Values.env.pgdb_username }}:{{ .Values.env.pgdb_password }}@{{ .Release.Name }}-pgdb.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}/{{ .Values.env.pgdb_name }}"
+  DATABASE_URL: "postgresql://{{ .Values.env.pgdb_username }}:{{ .Values.env.pgdb_password }}@{{ (include "plane.fullname" .) }}-pgdb.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}/{{ .Values.env.pgdb_name }}"
   {{- else if .Values.env.pgdb_remote_url }}
   DATABASE_URL: {{ .Values.env.pgdb_remote_url}}
   {{ else }}
@@ -19,13 +19,13 @@ stringData:
   {{ end }}
 
   {{- if .Values.services.redis.local_setup }}
-  REDIS_URL: "redis://{{ .Release.Name }}-redis.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:6379/"
+  REDIS_URL: "redis://{{ (include "plane.fullname" .) }}-redis.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:6379/"
   {{- else if .Values.env.remote_redis_url }}
   REDIS_URL: {{ .Values.env.remote_redis_url | default "" | quote }}
   {{- end }}
 
   {{- if .Values.services.rabbitmq.local_setup }}
-  AMQP_URL: "amqp://{{ .Values.services.rabbitmq.default_user}}:{{ .Values.services.rabbitmq.default_password}}@{{ .Release.Name }}-rabbitmq.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}/"
+  AMQP_URL: "amqp://{{ .Values.services.rabbitmq.default_user}}:{{ .Values.services.rabbitmq.default_password}}@{{ (include "plane.fullname" .) }}-rabbitmq.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}/"
   {{- else if .Values.services.rabbitmq.external_rabbitmq_url }}
   AMQP_URL: {{ .Values.services.rabbitmq.external_rabbitmq_url}}
   {{- else }}
@@ -54,7 +54,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-silo-vars
+  name: {{ include "plane.fullname" . }}-silo-vars
 data:
   PORT: "3000"
   BATCH_SIZE: {{ .Values.env.silo_envs.batch_size | default 100 | quote }}
@@ -68,7 +68,7 @@ data:
   CORS_ALLOWED_ORIGINS: "http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }},{{ .Values.env.silo_envs.cors_allowed_origins }}"
   {{- else}}
   CORS_ALLOWED_ORIGINS: "http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }}"
-  {{- end }} 
+  {{- end }}
 
   {{- if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) }}
   APP_BASE_URL: "https://{{ .Values.license.licenseDomain }}"
@@ -76,16 +76,16 @@ data:
   APP_BASE_URL: "http://{{ .Values.license.licenseDomain }}"
   {{- end }}
 
-  API_BASE_URL: "http://{{ .Release.Name }}-api.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:8000/"
-  
+  API_BASE_URL: "http://{{ (include "plane.fullname" .) }}-api.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:8000/"
+
   {{- if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) }}
   SILO_API_BASE_URL: "https://{{ .Values.license.licenseDomain }}"
   {{- else }}
   SILO_API_BASE_URL: "http://{{ .Values.license.licenseDomain }}"
   {{- end }}
 
-  PAYMENT_SERVER_BASE_URL: "http://{{ .Release.Name }}-monitor.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:8080/"
-  FEATURE_FLAG_SERVER_BASE_URL: "http://{{ .Release.Name }}-monitor.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:8080/"
+  PAYMENT_SERVER_BASE_URL: "http://{{ (include "plane.fullname" .) }}-monitor.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:8080/"
+  FEATURE_FLAG_SERVER_BASE_URL: "http://{{ (include "plane.fullname" .) }}-monitor.{{ .Release.Namespace }}.svc.{{ .Values.env.default_cluster_domain | default "cluster.local" }}:8080/"
 
   SENTRY_DSN: {{ .Values.env.silo_envs.sentry_dsn | default "" | quote }}
   SENTRY_ENVIRONMENT: {{ .Values.env.silo_envs.sentry_environment | default "development" | quote }}

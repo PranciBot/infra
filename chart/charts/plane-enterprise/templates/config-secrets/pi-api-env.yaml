@@ -5,10 +5,10 @@ kind: Secret
 type: Opaque
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-pi-api-secrets
+  name: {{ include "plane.fullname" . }}-pi-api-secrets
 stringData:
   {{- if .Values.services.postgres.local_setup }}
-  PLANE_PI_DATABASE_URL: "postgresql://{{ .Values.env.pgdb_username }}:{{ .Values.env.pgdb_password }}@{{ .Release.Name }}-pgdb.{{ .Release.Namespace }}.svc.cluster.local/{{ .Values.env.pg_pi_db_name }}"
+  PLANE_PI_DATABASE_URL: "postgresql://{{ .Values.env.pgdb_username }}:{{ .Values.env.pgdb_password }}@{{ (include "plane.fullname" .) }}-pgdb.{{ .Release.Namespace }}.svc.cluster.local/{{ .Values.env.pg_pi_db_name }}"
   {{- else if .Values.env.pg_pi_db_remote_url }}
   PLANE_PI_DATABASE_URL: {{ .Values.env.pg_pi_db_remote_url}}
   {{- else }}
@@ -18,15 +18,15 @@ stringData:
   {{- if .Values.env.pi_envs.follower_postgres_uri }}
   FOLLOWER_POSTGRES_URI: {{ .Values.env.pi_envs.follower_postgres_uri | quote }}
   {{- else if .Values.services.postgres.local_setup }}
-  FOLLOWER_POSTGRES_URI: "postgresql://{{ .Values.env.pgdb_username }}:{{ .Values.env.pgdb_password }}@{{ .Release.Name }}-pgdb.{{ .Release.Namespace }}.svc.cluster.local/{{ .Values.env.pgdb_name }}"
+  FOLLOWER_POSTGRES_URI: "postgresql://{{ .Values.env.pgdb_username }}:{{ .Values.env.pgdb_password }}@{{ (include "plane.fullname" .) }}-pgdb.{{ .Release.Namespace }}.svc.cluster.local/{{ .Values.env.pgdb_name }}"
   {{- else if .Values.env.pgdb_remote_url }}
   FOLLOWER_POSTGRES_URI: {{ .Values.env.pgdb_remote_url | quote }}
-  {{- else }}  
+  {{- else }}
   FOLLOWER_POSTGRES_URI: ""
   {{- end }}
 
   {{- if .Values.services.rabbitmq.local_setup }}
-  AMQP_URL: "amqp://{{ .Values.services.rabbitmq.default_user }}:{{ .Values.services.rabbitmq.default_password }}@{{ .Release.Name }}-rabbitmq.{{ .Release.Namespace }}.svc.cluster.local/"
+  AMQP_URL: "amqp://{{ .Values.services.rabbitmq.default_user }}:{{ .Values.services.rabbitmq.default_password }}@{{ (include "plane.fullname" .) }}-rabbitmq.{{ .Release.Namespace }}.svc.cluster.local/"
   {{- else if .Values.services.rabbitmq.external_rabbitmq_url }}
   AMQP_URL: {{ .Values.services.rabbitmq.external_rabbitmq_url | default "" | quote }}
   {{- else }}
@@ -42,7 +42,7 @@ stringData:
   {{- if .Values.services.pi.ai_providers.groq.enabled }}
   GROQ_API_KEY: {{ .Values.services.pi.ai_providers.groq.api_key | default "" |  quote }}
   {{- end }}
-  
+
 
   {{- if .Values.services.pi.ai_providers.cohere.enabled }}
   COHERE_API_KEY: {{ .Values.services.pi.ai_providers.cohere.api_key | default "" | quote }}
@@ -70,7 +70,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-pi-api-vars
+  name: {{ include "plane.fullname" . }}-pi-api-vars
 data:
   DEBUG: {{ if .Values.env.pi_envs.debug | default false }} "1" {{- else -}} "0" {{ end }}
   LOG_LEVEL: {{ .Values.env.pi_envs.log_level | default "DEBUG" | quote }}
@@ -92,10 +92,10 @@ data:
 
   PI_INTERNAL_SECRET: {{ .Values.env.pi_envs.internal_secret | default "tyfvfqvBJAgpm9bzvf3r4urJer0Ehfdubk" | quote }}
 
-  FEATURE_FLAG_SERVER_BASE_URL: "http://{{ .Release.Name }}-monitor.{{ .Release.Namespace }}.svc.cluster.local:8080"
+  FEATURE_FLAG_SERVER_BASE_URL: "http://{{ (include "plane.fullname" .) }}-monitor.{{ .Release.Namespace }}.svc.cluster.local:8080"
   PI_BASE_PATH: "/pi"
 
-  
+
   {{- if eq .Values.env.pi_envs.cors_allowed_origins "*"}}
   CORS_ALLOWED_ORIGINS: "*"
   {{- else if .Values.env.pi_envs.cors_allowed_origins }}
@@ -103,7 +103,7 @@ data:
   {{- else }}
   CORS_ALLOWED_ORIGINS: "http://{{ .Values.license.licenseDomain }},https://{{ .Values.license.licenseDomain }}"
   {{- end }}
-  
+
   {{- if or .Values.ssl.tls_secret_name (and .Values.ssl.createIssuer .Values.ssl.generateCerts) }}
   PLANE_OAUTH_REDIRECT_URI: "https://{{ .Values.license.licenseDomain }}/pi/api/v1/oauth/callback/"
   {{- else }}
@@ -115,7 +115,7 @@ data:
   CLAUDE_BASE_URL: {{ .Values.services.pi.ai_providers.claude.base_url | default "" | quote }}
   COHERE_BASE_URL: {{ .Values.services.pi.ai_providers.cohere.base_url | default "" | quote }}
   GROQ_BASE_URL: {{ .Values.services.pi.ai_providers.groq.base_url | default "" | quote }}
-  
+
   {{- if .Values.services.pi.ai_providers.custom_llm.enabled }}
   CUSTOM_LLM_ENABLED: "true"
   CUSTOM_LLM_MODEL_KEY: {{ .Values.services.pi.ai_providers.custom_llm.model_key | default "gpt-oss-120b" | quote }}
