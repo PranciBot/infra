@@ -19,9 +19,7 @@
 
     <properties>
         <helm.plane-enterprise.fullnameOverride>infra-plane</helm.plane-enterprise.fullnameOverride>
-        <helm.plane-enterprise.license.licenseDomain>
-            plane.127.0.0.1.sslip.io
-        </helm.plane-enterprise.license.licenseDomain>
+        <helm.plane-enterprise.license.licenseDomain>plane.127.0.0.1.sslip.io</helm.plane-enterprise.license.licenseDomain>
         <helm.plane-enterprise.env.web_url>http://plane.127.0.0.1.sslip.io:32080</helm.plane-enterprise.env.web_url>
         <helm.plane-enterprise.planeVersion>v2.4.0</helm.plane-enterprise.planeVersion>
         <helm.plane-enterprise.ingress.enabled>true</helm.plane-enterprise.ingress.enabled>
