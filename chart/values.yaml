@@ -15,3 +15,19 @@ plane-enterprise:
       memoryRequest: 512Mi
       cpuLimit: 1000m
       cpuRequest: 250m
+plane-event-bridge:
+  image:
+    repository: admin/plane-event-bridge
+    tag: latest
+  fullnameOverride: infra-plane-event-bridge-api
+  env:
+  - name: PLANE_API_URL
+    value: http://plane.127.0.0.1.sslip.io:32080/api/v1
+  - name: PLANE_API_KEY
+    value: plane_api_0b0f277556a74289aeb802e3a581f937
+  - name: PLANE_PROJECT_INTERNAL_ID
+    value: 47cb2524-ef10-4959-9dde-a93e81824dca
+  - name: PLANE_WORKSPACE
+    value: init-build
+  - name: PLANE_PROJECT_ID
+    value: PA

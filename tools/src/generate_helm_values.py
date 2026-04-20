@@ -26,17 +26,44 @@ def strip_ns(tag):
     return tag.split("}", 1)[-1]
 
 
+def parse_env_block(env_str):
+    env_list = []
+    lines = [line.strip() for line in env_str.splitlines() if line.strip()]
+
+    for line in lines:
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+
+        # convert to ENV format: plane.api-url → PLANE_API_URL
+        env_name = key.upper().replace(".", "_").replace("-", "_")
+
+        env_list.append({
+            "name": env_name,
+            "value": value.strip()
+        })
+
+    return env_list
+
+
 def extract_helm_properties(pom_path):
     tree = ET.parse(pom_path)
     root = tree.getroot()
     result = {}
+
     for prop in root.iter():
         key = strip_ns(prop.tag)
-        value = (prop.text or "").strip()
-        value = " ".join(value.split())
+        raw_value = prop.text or ""
+
         if key.startswith("helm."):
             clean_key = key.replace("helm.", "", 1)
-            result[clean_key] = convert_value(value)
+
+            if clean_key.endswith(".env"):
+                result[clean_key] = parse_env_block(raw_value)
+            else:
+                value = " ".join(raw_value.split())
+                result[clean_key] = convert_value(value)
+
     return result
 
 

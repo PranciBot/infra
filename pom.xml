@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>tools</module>
+        <module>plane-event-bridge</module>
     </modules>
 
     <properties>
@@ -29,6 +30,17 @@
         <helm.plane-enterprise.services.worker.memoryRequest>512Mi</helm.plane-enterprise.services.worker.memoryRequest>
         <helm.plane-enterprise.services.worker.cpuLimit>1000m</helm.plane-enterprise.services.worker.cpuLimit>
         <helm.plane-enterprise.services.worker.cpuRequest>250m</helm.plane-enterprise.services.worker.cpuRequest>
+
+        <helm.plane-event-bridge.image.repository>admin/plane-event-bridge</helm.plane-event-bridge.image.repository>
+        <helm.plane-event-bridge.image.tag>latest</helm.plane-event-bridge.image.tag>
+        <helm.plane-event-bridge.fullnameOverride>infra-plane-event-bridge-api</helm.plane-event-bridge.fullnameOverride>
+        <helm.plane-event-bridge.env>
+            plane.api-url=http://plane.127.0.0.1.sslip.io:32080/api/v1
+            plane.api-key=plane_api_0b0f277556a74289aeb802e3a581f937
+            plane.project-internal-id=47cb2524-ef10-4959-9dde-a93e81824dca
+            plane.workspace=init-build
+            plane.project-id=PA
+        </helm.plane-event-bridge.env>
     </properties>
 
     <build>

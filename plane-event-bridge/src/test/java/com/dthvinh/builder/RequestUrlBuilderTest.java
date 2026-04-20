@@ -15,6 +15,6 @@ public class RequestUrlBuilderTest {
                 .specificComment("111")
                 .build();
 
-        assertEquals("/workspaces/abc/projects/cde/work-items/fgh/comments/111", actual);
+        assertEquals("/workspaces/abc/projects/cde/work-items/fgh/comments/111/", actual);
     }
 }
