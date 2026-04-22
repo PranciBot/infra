@@ -1,3 +1,27 @@
+global:
+  hostpath: /run/desktop/mnt/host/e/Dev/Project/personal-assistant/local4k8s
+  pv:
+    pgdb:
+      size: 2Gi
+      label: plane-pgdb
+      subPath: pgdb
+    redis:
+      size: 500Mi
+      label: plane-redis
+      subPath: redis
+    rabbitmq:
+      size: 100Mi
+      label: plane-rabbitmq
+      subPath: rabbitmq
+    minio:
+      size: 5Gi
+      label: plane-minio
+      subPath: minio
+    monitor:
+      size: 100Mi
+      label: plane-monitor
+      subPath: monitor
+
 plane-enterprise:
   fullnameOverride: infra-plane
   license:

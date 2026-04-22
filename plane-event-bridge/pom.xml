@@ -8,6 +8,7 @@
         <groupId>com.dthvinh</groupId>
         <artifactId>infra</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>plane-event-bridge</artifactId>

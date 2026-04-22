@@ -16,5 +16,6 @@
     <modules>
         <module>tools</module>
         <module>plane-event-bridge</module>
+        <module>persistent-storage</module>
     </modules>
 </project>

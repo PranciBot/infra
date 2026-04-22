@@ -4,6 +4,7 @@ description: A Helm chart for Personal assistant infrastructure
 type: application
 version: 0.1.0
 appVersion: "0.0.1"
+
 dependencies:
   - name: plane-enterprise
     version: 2.3.2
