@@ -29,7 +29,7 @@ ingress:
   hosts:
     - host: ""
       paths:
-        - path: /plane-event-bridge-api
+        - path: /
           pathType: Prefix
   tls: []
 httpRoute:

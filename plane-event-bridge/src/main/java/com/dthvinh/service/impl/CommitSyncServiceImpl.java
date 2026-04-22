@@ -96,7 +96,7 @@ public class CommitSyncServiceImpl implements CommitSyncService {
                         .toList()).join();
 
         LOGGER.info("Found {}/{} work items match commit message, not found: {}",
-                allResult.size(), issueKeys.size(), allResult.stream().filter(e -> !e.getItem2()).map(Tuple2::getItem1).toList());
+                allResult.stream().filter(Tuple2::getItem2).toList().size(), issueKeys.size(), allResult.stream().filter(e -> !e.getItem2()).map(Tuple2::getItem1).toList());
 
         return commitWorkItemMap;
     }
