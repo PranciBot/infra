@@ -79,6 +79,48 @@
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+
+                <executions>
+                    <execution>
+                        <id>helm-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>helm</executable>
+                            <arguments>
+                                <argument>package</argument>
+                                <argument>${project.basedir}/deploy/chart</argument>
+                                <argument>-d</argument>
+                                <argument>${project.build.directory}</argument>
+                                <argument>--version</argument>
+                                <argument>${version}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>push</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>curl.exe</executable>
+                            <arguments>
+                                <argument>--form</argument>
+                                <argument>chart=@${project.build.directory}/plane-event-bridge-${appVersion}.tgz</argument>
+                                <argument>${chart.museum.url}/api/charts</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>${quarkus.platform.group-id}</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
