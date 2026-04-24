@@ -1,5 +1,9 @@
 global:
-  kafka.bootstrapServer.service.port: 9092
+  kafka:
+    bootstrapServer:
+      service:
+        internal:
+          port: 9092
 
 event-dispatcher-ui:
   replicaCount: 1

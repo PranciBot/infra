@@ -16,7 +16,6 @@
 
     <modules>
         <module>event-dispatcher</module>
-        <module>event-dispatcher-ui</module>
         <module>platform-gateway</module>
     </modules>
 

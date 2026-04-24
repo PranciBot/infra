@@ -2,11 +2,8 @@ dependencies:
 - name: event-dispatcher
   repository: file://../../event-dispatcher/deploy/chart
   version: 1.0.0-SNAPSHOT
-- name: event-dispatcher-ui
-  repository: file://../../event-dispatcher-ui/deploy/chart
-  version: 1.0.0-SNAPSHOT
 - name: platform-gateway
   repository: file://../../platform-gateway/deploy/chart
   version: 1.0.0-SNAPSHOT
-digest: sha256:c9506d3b6bc5e93ca1c362819afdc1e55bf51bb91e605dbe2ce1304a0333f8f7
-generated: "2026-04-24T07:32:00.9649217+07:00"
+digest: sha256:a369f136517b78590d3c4c7e43f543d17eb3ba0b744fcf91c7bcd83745d7e71d
+generated: "2026-04-24T18:44:33.1630169+07:00"

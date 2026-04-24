@@ -1,6 +1,0 @@
-apiVersion: v2
-name: event-dispatcher-ui
-description: Helm chart for deploying Provectus Kafka UI
-type: application
-version: 1.0.0-SNAPSHOT
-appVersion: "latest"
