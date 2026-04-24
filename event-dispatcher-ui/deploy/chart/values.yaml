@@ -1,0 +1,102 @@
+global:
+  kafka.bootstrapServer.service.port:
+
+replicaCount: 1
+
+image:
+  repository: provectuslabs/kafka-ui
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: [ ]
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: { }
+  name: ""
+
+podAnnotations: { }
+podLabels: { }
+
+podSecurityContext: { }
+
+securityContext: { }
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: kong
+  annotations:
+    konghq.com/strip-path: "true"
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: [ ]
+
+httpRoute:
+  enabled: false
+  annotations: { konghq.com/strip-path: "true" }
+  parentRefs:
+    - name: gateway
+      sectionName: http
+  hostnames:
+    - kafka-ui.local
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 45
+  periodSeconds: 15
+  timeoutSeconds: 5
+  failureThreshold: 5
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+
+volumes: [ ]
+
+volumeMounts: [ ]
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }
+
+kafka:
+  clusters:
+    - name: event-dispatcher
+      bootstrapServers: event-dispatcher-kafka-server:9092

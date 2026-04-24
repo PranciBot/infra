@@ -1,0 +1,146 @@
+global:
+  kafka.bootstrapServer.service.port: 9092
+
+event-dispatcher-ui:
+  replicaCount: 1
+  image:
+    repository: provectuslabs/kafka-ui
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+  service:
+    type: ClusterIP
+    port: 8080
+  ingress:
+    enabled: true
+    className: kong
+    annotations:
+      konghq.com/strip-path: "true"
+    hosts:
+      - host: "event-dispatcher-ui.127.0.0.1.sslip.io"
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  kafka:
+    clusters:
+      - name: event-dispatcher
+        bootstrapServers: event-dispatcher-kafka-server:9092
+
+event-dispatcher:
+  replicaCount: 1
+  image:
+    repository: docker.io/apache/kafka
+    pullPolicy: IfNotPresent
+    tag: "4.1.1"
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+  kafka:
+    nodeId: 1
+    processRoles: "broker,controller"
+    listeners: "INTERNAL://:9092,EXTERNAL://:30092,CONTROLLER://:9093"
+    externalAdvertisedHost: "192.168.1.196"
+    #  externalAdvertisedHost: "localhost"
+    advertisedListeners: "INTERNAL://event-dispatcher-kafka-server:9092,EXTERNAL://192.168.1.196:30092"
+    controllerListenerNames: "CONTROLLER"
+    listenerSecurityProtocolMap: >
+      INTERNAL:PLAINTEXT,
+      EXTERNAL:PLAINTEXT,
+      CONTROLLER:PLAINTEXT
+    controllerQuorumVoters: ""
+    offsetsTopicReplicationFactor: 1
+    transactionStateLogReplicationFactor: 1
+    transactionStateLogMinIsr: 1
+    groupInitialRebalanceDelayMs: 0
+    interBrokerListenerName: "INTERNAL"
+    numPartitions: 3
+  service:
+    type: NodePort
+    ports:
+      internal: 9092
+      controller: 9093
+      external: 30092
+    nodePorts:
+      external: 30092
+  ingress:
+    enabled: false
+    className: ""
+    annotations: {}
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+  livenessProbe:
+    tcpSocket:
+      port: internal
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readinessProbe:
+    tcpSocket:
+      port: internal
+    initialDelaySeconds: 5
+    periodSeconds: 10
+
+platform-gateway:
+  deployment:
+    test:
+      enabled: false
+  controller:
+    proxy:
+      nameOverride: "{{ .Release.Name }}-gateway-proxy"
+    enabled: true
+    postgresql:
+      enabled: false
+    deployment:
+      kong:
+        enabled: false
+    ingressController:
+      enabled: true
+      gatewayDiscovery:
+        enabled: true
+        generateAdminApiService: true
+    podAnnotations:
+      kuma.io/gateway: enabled
+      traffic.kuma.io/exclude-outbound-ports: "8444"
+      traffic.sidecar.istio.io/excludeOutboundPorts: "8444"
+  gateway:
+    postgresql:
+      enabled: false
+    proxy:
+      http:
+        nodePort: 32080
+      tls:
+        nodePort: 32443
+    admin:
+      http:
+        nodePort: 32081
+      tls:
+        nodePort: 32444
+    manager:
+      http:
+        nodePort: 32082
+      tls:
+        nodePort: 32445
+    env:
+      admin_gui_api_url: "http://localhost:32081"
+    ingressController:
+      enabled: false
+      env:
+        role: traditional
+        database: "off"

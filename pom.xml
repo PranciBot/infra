@@ -13,4 +13,38 @@
 
     <artifactId>infra</artifactId>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>event-dispatcher</module>
+        <module>event-dispatcher-ui</module>
+        <module>platform-gateway</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.1</version>
+
+                <executions>
+                    <execution>
+                        <id>helm-dependency-update</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>helm</executable>
+                            <arguments>
+                                <argument>dependency</argument>
+                                <argument>update</argument>
+                                <argument>${project.basedir}/deploy/chart</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

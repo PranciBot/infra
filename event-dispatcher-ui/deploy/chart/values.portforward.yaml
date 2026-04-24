@@ -1,0 +1,7 @@
+service:
+  type: NodePort
+
+kafka:
+  clusters:
+    - name: event-dispatcher-local
+      bootstrapServers: localhost:9094

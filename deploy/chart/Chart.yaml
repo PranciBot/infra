@@ -1,0 +1,16 @@
+apiVersion: v2
+name: chart
+description: A Helm chart Pranci bot infrastructure
+type: application
+version: 1.0.0-SNAPSHOT
+appVersion: "1.16.0"
+dependencies:
+  - name: event-dispatcher
+    version: 1.0.0-SNAPSHOT
+    repository: file://../../event-dispatcher/deploy/chart
+  - name: event-dispatcher-ui
+    version: 1.0.0-SNAPSHOT
+    repository: file://../../event-dispatcher-ui/deploy/chart
+  - name: platform-gateway
+    version: 1.0.0-SNAPSHOT
+    repository: file://../../platform-gateway/deploy/chart
