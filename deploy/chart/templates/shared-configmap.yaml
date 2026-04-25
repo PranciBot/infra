@@ -1,0 +1,12 @@
+{{- if .Values.global.useSharedConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-shared-config" .Release.Name }}
+  labels:
+    {{- include "charrt.labels" . | nindent 4 }}
+data:
+  KAFKA_BOOTSTRAP_SERVERS: {{ .Values.global.sharedConfig.kafka.bootstrapServers | quote }}
+  KAFKA_PRODUCER_RETRIES: {{ .Values.global.sharedConfig.kafka.producerRetries | quote }}
+{{- end }}
+
