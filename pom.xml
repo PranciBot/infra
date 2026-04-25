@@ -17,33 +17,6 @@
     <modules>
         <module>event-dispatcher</module>
         <module>platform-gateway</module>
+        <module>caching-service</module>
     </modules>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.1</version>
-
-                <executions>
-                    <execution>
-                        <id>helm-dependency-update</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>helm</executable>
-                            <arguments>
-                                <argument>dependency</argument>
-                                <argument>update</argument>
-                                <argument>${project.basedir}/deploy/chart</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

@@ -43,21 +43,6 @@
                             </arguments>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>push</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>curl.exe</executable>
-                            <arguments>
-                                <argument>--form</argument>
-                                <argument>chart=@${project.build.directory}/event-dispatcher-${appVersion}.tgz</argument>
-                                <argument>${chart.museum.url}/api/charts</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>

@@ -11,3 +11,6 @@ dependencies:
   - name: platform-gateway
     version: 1.0.0-SNAPSHOT
     repository: file://../../platform-gateway/deploy/chart
+  - name: lifestyle-service
+    version: 1.0.0-SNAPSHOT
+    repository: file://../../../lifestyle-service/deploy/chart

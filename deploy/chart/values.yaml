@@ -5,45 +5,7 @@ global:
         internal:
           port: 9092
 
-event-dispatcher-ui:
-  replicaCount: 1
-  image:
-    repository: provectuslabs/kafka-ui
-    pullPolicy: IfNotPresent
-    tag: "latest"
-  serviceAccount:
-    create: true
-    automount: true
-    annotations: {}
-    name: ""
-  service:
-    type: ClusterIP
-    port: 8080
-  ingress:
-    enabled: true
-    className: kong
-    annotations:
-      konghq.com/strip-path: "true"
-    hosts:
-      - host: "event-dispatcher-ui.127.0.0.1.sslip.io"
-        paths:
-          - path: /
-            pathType: Prefix
-    tls: []
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 100m
-      memory: 256Mi
-  kafka:
-    clusters:
-      - name: event-dispatcher
-        bootstrapServers: event-dispatcher-kafka-server:9092
-
 event-dispatcher:
-  replicaCount: 1
   image:
     repository: docker.io/apache/kafka
     pullPolicy: IfNotPresent
@@ -148,3 +110,14 @@ platform-gateway:
       env:
         role: traditional
         database: "off"
+
+lifestyle-service:
+  image:
+    group: admin
+    repository: lifestyle-service
+    pullPolicy: IfNotPresent
+    tag: latest
+  kafka:
+    bootstrapServers: "192.168.1.196:30092"
+    producer:
+      retries: "3"

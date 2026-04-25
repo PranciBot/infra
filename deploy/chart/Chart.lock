@@ -5,5 +5,8 @@ dependencies:
 - name: platform-gateway
   repository: file://../../platform-gateway/deploy/chart
   version: 1.0.0-SNAPSHOT
-digest: sha256:a369f136517b78590d3c4c7e43f543d17eb3ba0b744fcf91c7bcd83745d7e71d
-generated: "2026-04-24T18:44:33.1630169+07:00"
+- name: lifestyle-service
+  repository: file://../../../lifestyle-service/deploy/chart
+  version: 1.0.0-SNAPSHOT
+digest: sha256:49a2ddbbba97b625c8b8673be99d1d70828e5132200cd98d1f776bc03cae4079
+generated: "2026-04-25T14:02:08.4596991+07:00"
