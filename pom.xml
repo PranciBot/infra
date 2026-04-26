@@ -18,5 +18,6 @@
         <module>event-dispatcher</module>
         <module>platform-gateway</module>
         <module>caching-service</module>
+        <module>event-dispatcher-topic-provisioner</module>
     </modules>
 </project>

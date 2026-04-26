@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "charrt.labels" . | nindent 4 }}
 data:
-  KAFKA_BOOTSTRAP_SERVERS: {{ .Values.global.sharedConfig.kafka.bootstrapServers | quote }}
-  KAFKA_PRODUCER_RETRIES: {{ .Values.global.sharedConfig.kafka.producerRetries | quote }}
+  KAFKA_BOOTSTRAP_SERVERS: "{{ .Release.Name }}-event-dispatcher:9092"
+  KAFKA_PRODUCER_RETRIES: "3"
 {{- end }}
 

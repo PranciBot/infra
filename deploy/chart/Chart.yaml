@@ -1,5 +1,5 @@
 apiVersion: v2
-name: chart
+name: infra
 description: A Helm chart Pranci bot infrastructure
 type: application
 version: 1.0.0-SNAPSHOT
@@ -14,3 +14,6 @@ dependencies:
   - name: lifestyle-service
     version: 1.0.0-SNAPSHOT
     repository: file://../../../lifestyle-service/deploy/chart
+  - name: event-dispatcher-topic-provisioner
+    version: 1.0.0-SNAPSHOT
+    repository: file://../../event-dispatcher-topic-provisioner/deploy/chart

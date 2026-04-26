@@ -31,9 +31,9 @@ kafka:
   listeners: "INTERNAL://:9092,EXTERNAL://:30092,CONTROLLER://:9093"
   externalAdvertisedHost: "192.168.1.196"
   #  externalAdvertisedHost: "localhost"
-  advertisedListeners: >
-    INTERNAL://event-dispatcher-kafka-server:9092,
-    EXTERNAL://192.168.1.196:30092
+  advertisedListenersPorts:
+    internal: 9092
+    external: 30092
   controllerListenerNames: "CONTROLLER"
   listenerSecurityProtocolMap: >
     INTERNAL:PLAINTEXT,
@@ -58,17 +58,17 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: { }
+  annotations: {}
   hosts:
     - host: chart-example.local
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: [ ]
+  tls: []
 
 httpRoute:
   enabled: false
-  annotations: { }
+  annotations: {}
   parentRefs:
     - name: gateway
       sectionName: http
@@ -80,7 +80,7 @@ httpRoute:
             type: PathPrefix
             value: /headers
 
-resources: { }
+resources: {}
 
 livenessProbe:
   tcpSocket:
@@ -100,12 +100,12 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 
-volumes: [ ]
+volumes: []
 
-volumeMounts: [ ]
+volumeMounts: []
 
-nodeSelector: { }
+nodeSelector: {}
 
-tolerations: [ ]
+tolerations: []
 
-affinity: { }
+affinity: {}

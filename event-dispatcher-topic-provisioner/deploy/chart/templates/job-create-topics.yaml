@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-kafka-topic-bootstrap
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: create-topics
+          image: docker.io/apache/kafka:latest
+
+          envFrom:
+            - configMapRef:
+                name: {{include "chart.sharedConfig" .}}
+
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+
+              echo "Using Kafka at $KAFKA_BOOTSTRAP_SERVERS"
+
+              /opt/kafka/bin/kafka-topics.sh \
+                --bootstrap-server "$KAFKA_BOOTSTRAP_SERVERS" \
+                --create --if-not-exists \
+                --topic life_style_tracking \
+                --partitions 2 \
+                --replication-factor 1

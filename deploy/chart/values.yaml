@@ -1,14 +1,5 @@
 global:
-  useSharedConfig: false
-  sharedConfig:
-    kafka:
-      bootstrapServers: "192.168.1.196:30092"
-      producerRetries: "3"
-  kafka:
-    bootstrapServer:
-      service:
-        internal:
-          port: 9092
+  useSharedConfig: true
 
 event-dispatcher:
   image:
@@ -121,7 +112,7 @@ lifestyle-service:
     group: admin
     repository: lifestyle-service
     pullPolicy: IfNotPresent
-    tag: latest
+    tag: 1.0-SNAPSHOT
   kafka:
     bootstrapServers: "192.168.1.196:30092"
     producer:

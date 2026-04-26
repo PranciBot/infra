@@ -51,7 +51,9 @@ spec:
               value: "{{ .Values.kafka.listeners }}"
 
             - name: KAFKA_ADVERTISED_LISTENERS
-              value: '{{- if .Values.kafka.advertisedListeners -}}{{ .Values.kafka.advertisedListeners }}{{- else -}}INTERNAL://{{ include "kafka-server.fullname" . }}:{{ .Values.service.ports.internal }},EXTERNAL://{{ .Values.kafka.externalAdvertisedHost }}:{{ .Values.service.nodePorts.external | default .Values.service.ports.external }}{{- end -}}'
+              value: >-
+                INTERNAL://{{ include "kafka-server.fullname" . }}:{{ .Values.kafka.advertisedListenersPorts.internal }},
+                EXTERNAL://{{ .Values.kafka.externalAdvertisedHost }}:{{ .Values.kafka.advertisedListenersPorts.external }}
 
             - name: KAFKA_CONTROLLER_LISTENER_NAMES
               value: "{{ .Values.kafka.controllerListenerNames }}"

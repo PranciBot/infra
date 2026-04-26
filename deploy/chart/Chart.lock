@@ -8,5 +8,8 @@ dependencies:
 - name: lifestyle-service
   repository: file://../../../lifestyle-service/deploy/chart
   version: 1.0.0-SNAPSHOT
-digest: sha256:49a2ddbbba97b625c8b8673be99d1d70828e5132200cd98d1f776bc03cae4079
-generated: "2026-04-25T14:02:08.4596991+07:00"
+- name: event-dispatcher-topic-provisioner
+  repository: file://../../event-dispatcher-topic-provisioner/deploy/chart
+  version: 1.0.0-SNAPSHOT
+digest: sha256:b6042a8833c26c6dd4f8737775d39122da6df0461fa46c00b762de80658246de
+generated: "2026-04-25T19:00:21.3632808+07:00"
