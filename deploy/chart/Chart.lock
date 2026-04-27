@@ -11,5 +11,8 @@ dependencies:
 - name: event-dispatcher-topic-provisioner
   repository: file://../../event-dispatcher-topic-provisioner/deploy/chart
   version: 1.0.0-SNAPSHOT
-digest: sha256:b6042a8833c26c6dd4f8737775d39122da6df0461fa46c00b762de80658246de
-generated: "2026-04-25T19:00:21.3632808+07:00"
+- name: persistent-storage
+  repository: file://../../persistent-storage/deploy/chart
+  version: 1.0.0-SNAPSHOT
+digest: sha256:4a2bc0000f677758e22f27dbe80565d7ae305a75db7b15d9fb75eaead627da9c
+generated: "2026-04-26T23:38:33.9428708+07:00"

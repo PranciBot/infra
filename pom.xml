@@ -19,5 +19,6 @@
         <module>platform-gateway</module>
         <module>caching-service</module>
         <module>event-dispatcher-topic-provisioner</module>
+        <module>persistent-storage</module>
     </modules>
 </project>

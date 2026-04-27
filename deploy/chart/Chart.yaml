@@ -17,3 +17,6 @@ dependencies:
   - name: event-dispatcher-topic-provisioner
     version: 1.0.0-SNAPSHOT
     repository: file://../../event-dispatcher-topic-provisioner/deploy/chart
+  - name: persistent-storage
+    version: 1.0.0-SNAPSHOT
+    repository: file://../../persistent-storage/deploy/chart
