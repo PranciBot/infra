@@ -15,9 +15,10 @@ event-dispatcher:
     nodeId: 1
     processRoles: "broker,controller"
     listeners: "INTERNAL://:9092,EXTERNAL://:30092,CONTROLLER://:9093"
-    externalAdvertisedHost: "192.168.1.196"
-    #  externalAdvertisedHost: "localhost"
-    advertisedListeners: "INTERNAL://event-dispatcher-kafka-server:9092,EXTERNAL://192.168.1.196:30092"
+    externalAdvertisedHost:
+    advertisedListenersPorts:
+      internal: 9092
+      external: 30092
     controllerListenerNames: "CONTROLLER"
     listenerSecurityProtocolMap: >
       INTERNAL:PLAINTEXT,
@@ -113,10 +114,6 @@ lifestyle-service:
     repository: lifestyle-service
     pullPolicy: IfNotPresent
     tag: 1.0-SNAPSHOT
-  kafka:
-    bootstrapServers: "192.168.1.196:30092"
-    producer:
-      retries: "3"
 
 persistent-storage:
   primary:
