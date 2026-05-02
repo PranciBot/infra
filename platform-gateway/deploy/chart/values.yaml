@@ -41,7 +41,7 @@ gateway:
       nodePort:
 
   admin:
-    enabled: true
+    enabled: false
     type: NodePort
     clusterIP: None
     http:
@@ -52,7 +52,7 @@ gateway:
       nodePort:
 
   manager:
-    enabled: true
+    enabled: false
     type: NodePort
     http:
       enabled: true

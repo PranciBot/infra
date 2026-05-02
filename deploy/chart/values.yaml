@@ -17,7 +17,9 @@ event-dispatcher:
     listeners: "INTERNAL://:9092,EXTERNAL://:30092,CONTROLLER://:9093"
     externalAdvertisedHost: "192.168.1.196"
     #  externalAdvertisedHost: "localhost"
-    advertisedListeners: "INTERNAL://event-dispatcher-kafka-server:9092,EXTERNAL://192.168.1.196:30092"
+    advertisedListenersPorts:
+      internal: 9092
+      external: 30092
     controllerListenerNames: "CONTROLLER"
     listenerSecurityProtocolMap: >
       INTERNAL:PLAINTEXT,
@@ -109,11 +111,8 @@ platform-gateway:
 
 lifestyle-service:
   image:
-    group: admin
+    registry: ""
+    group: ""
     repository: lifestyle-service
-    pullPolicy: IfNotPresent
+    pullPolicy: Never
     tag: 1.0-SNAPSHOT
-  kafka:
-    bootstrapServers: "192.168.1.196:30092"
-    producer:
-      retries: "3"
