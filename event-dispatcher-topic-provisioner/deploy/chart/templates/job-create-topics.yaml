@@ -20,11 +20,21 @@ spec:
             - |
               set -e
 
-              echo "Using Kafka at $KAFKA_BOOTSTRAP_SERVERS"
+              echo "Waiting for Kafka at $KAFKA_BOOTSTRAP_SERVERS..."
+
+              until /opt/kafka/bin/kafka-broker-api-versions.sh \
+                --bootstrap-server "$KAFKA_BOOTSTRAP_SERVERS" >/dev/null 2>&1; do
+                echo "Kafka not ready yet, retrying..."
+                sleep 5
+              done
+
+              echo "Kafka is ready!"
+
+              echo "Creating topic..."
 
               /opt/kafka/bin/kafka-topics.sh \
                 --bootstrap-server "$KAFKA_BOOTSTRAP_SERVERS" \
                 --create --if-not-exists \
-                --topic life_style_tracking \
+                --topic life-style-tracking \
                 --partitions 2 \
                 --replication-factor 1
