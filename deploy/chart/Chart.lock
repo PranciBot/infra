@@ -5,11 +5,8 @@ dependencies:
 - name: platform-gateway
   repository: file://../../platform-gateway/deploy/chart
   version: 1.0.0-SNAPSHOT
-- name: lifestyle-service
-  repository: file://../../../lifestyle-service/deploy/chart
-  version: 1.0.0-SNAPSHOT
 - name: event-dispatcher-topic-provisioner
   repository: file://../../event-dispatcher-topic-provisioner/deploy/chart
   version: 1.0.0-SNAPSHOT
-digest: sha256:b6042a8833c26c6dd4f8737775d39122da6df0461fa46c00b762de80658246de
-generated: "2026-04-25T19:00:21.3632808+07:00"
+digest: sha256:7b2429b4beb3332c85da4adcdf35bdfbbe88c1c5274b2e192083f832b6bba8bc
+generated: "2026-05-03T06:49:44.1031139+07:00"

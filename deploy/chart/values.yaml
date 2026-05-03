@@ -109,10 +109,3 @@ platform-gateway:
         role: traditional
         database: "off"
 
-lifestyle-service:
-  image:
-    registry: ""
-    group: ""
-    repository: lifestyle-service
-    pullPolicy: Never
-    tag: 1.0-SNAPSHOT
