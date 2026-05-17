@@ -108,19 +108,12 @@ platform-gateway:
       env:
         role: traditional
         database: "off"
-
-<<<<<<< HEAD
-lifestyle-service:
-  image:
-    group: admin
-    repository: lifestyle-service
-    pullPolicy: IfNotPresent
-    tag: 1.0-SNAPSHOT
-
 persistent-storage:
   primary:
     persistence:
       enabled: true
       existingClaim:
-=======
->>>>>>> origin/master
+  auth:
+    username: postgres
+    password: password
+    database: masterdb
